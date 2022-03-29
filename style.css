@@ -1,0 +1,52 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  padding: 5px 10px;
+  font-family: inherit;
+  background-color: white;
+  font-weight: inherit;
+  border: 2px solid black;
+}
+
+#sideDiv {
+  margin-left: 20px;
+  width: 12vw;
+}
+
+#btnContainer > * {
+  margin: 5px 0px;
+}
+
+#infoDiv {
+  text-align: center;
+}
+
+#btnContainer select {
+  border: 2px solid black;
+  padding: 5px 10px;
+  text-align: center;
+  background: white;
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+#btnContainer {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
