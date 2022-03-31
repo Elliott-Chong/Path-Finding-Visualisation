@@ -9,7 +9,7 @@ let visualising = false
 let algorithm = 'Breadth First Search'
 movingStart = false
 movingEnd = false
-
+let startSvg
 
 
 function setup() {
@@ -24,6 +24,7 @@ function setup() {
     let startBtn = createButton('Visualise')
     let resetBtn = createButton('Reset')
     let desc1 = createP('Drag to place walls, pretty self explanatory init?')
+    let desc2 = createP('To change the locations of the start and end points, simply click on one of them first, then move it to another cell.')
 
     // algorithm selection
     sel = createSelect()
@@ -41,6 +42,7 @@ function setup() {
     btnContainer.elt.appendChild(resetBtn.elt)
     btnContainer.elt.appendChild(sel.elt)
     infoDiv.elt.appendChild(desc1.elt)
+    infoDiv.elt.appendChild(desc2.elt)
     sideDiv.elt.appendChild(btnContainer.elt)
     sideDiv.elt.appendChild(infoDiv.elt)
     sideDiv.elt.appendChild(infoDiv.elt)
@@ -52,6 +54,42 @@ function setup() {
 
 const changeAlgorithm = () => {
     algorithm = sel.value()
+}
+
+function mousePressed() {
+    if (visualising) return
+    let y, x
+    y = Math.floor(map(mouseY, 0, width, 0, ROWS))
+    x = Math.floor(map(mouseX, 0, height, 0, COLS))
+    if (y >= ROWS || y < 0 || x >= COLS || x < 0) return
+    if (BoardObj.board[y][x].isStart) {
+        if (movingStart) {
+            movingStart = false
+        } else {
+            movingStart = true
+            movingEnd = false
+        }
+    }
+    else if (BoardObj.board[y][x].isEnd) {
+        if (movingEnd) {
+            movingEnd = false
+        } else {
+            movingEnd = true
+            movingStart = false
+        }
+    }
+    else if (movingStart) {
+        BoardObj.startingIndex = { i: y, j: x }
+        BoardObj.rerender()
+        movingEnd = false
+        movingStart = false
+    }
+    else if (movingEnd) {
+        BoardObj.endingIndex = { i: y, j: x }
+        BoardObj.rerender()
+        movingEnd = false
+        movingStart = false
+    }
 }
 
 const reset = () => {
@@ -88,6 +126,7 @@ const makeWall = (y, x) => {
 
 
 async function draw() {
+    background(255)
 
     if (mouseIsPressed) {
         let y, x

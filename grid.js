@@ -8,6 +8,9 @@ class Grid {
         this.isStart = isStart
         this.parent = null
         this.isEnd = isEnd
+        this.g = null
+        this.h = null
+        this.f = null
     }
 
     show() {
@@ -28,6 +31,12 @@ class Grid {
         }
         else if (this.isExplored && !this.isStart && !this.isEnd && !this.isPath) {
             fill(150)
+        }
+        if (movingStart && this.isStart) {
+            fill('rgba(0,0,255,0.5)')
+        }
+        if (movingEnd && this.isEnd) {
+            fill('rgba(255,0,0,0.5)')
         }
         rect(this.j * LENGTH, this.i * LENGTH, LENGTH, LENGTH)
     }

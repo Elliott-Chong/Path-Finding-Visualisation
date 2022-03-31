@@ -56,13 +56,6 @@ class AI {
 
     async start(algorithm) {
         this.algorithm = algorithm
-        switch (this.algorithm) {
-            case 'Breadth First Search':
-                this.frontier = new QueueFrontier()
-            case 'Depth First Search':
-                this.frontier = new StackFrontier()
-            default:
-        }
         if (this.algorithm === 'Breadth First Search') {
             this.frontier = new QueueFrontier()
         }
@@ -139,6 +132,10 @@ class AI {
                 }
             }
         }
+
+
+
+
         return neigbours
     }
 }
