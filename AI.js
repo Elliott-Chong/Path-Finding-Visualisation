@@ -56,11 +56,12 @@ class AI {
 
     async start(algorithm) {
         this.algorithm = algorithm
-        if (this.algorithm === 'Breadth First Search') {
-            this.frontier = new QueueFrontier()
-        }
-        else if (this.algorithm === 'Depth First Search') {
-            this.frontier = new StackFrontier()
+        switch (this.algorithm) {
+            case 'Breadth First Search':
+                this.frontier = new QueueFrontier()
+            case 'Depth First Search':
+                this.frontier = new StackFrontier()
+            default:
         }
         this.seen = []
         this.BoardObj.reset()
