@@ -63,6 +63,12 @@ class AI {
                 this.frontier = new StackFrontier()
             default:
         }
+        if (this.algorithm === 'Breadth First Search') {
+            this.frontier = new QueueFrontier()
+        }
+        else if (this.algorithm === 'Depth First Search') {
+            this.frontier = new StackFrontier()
+        }
         this.seen = []
         this.BoardObj.reset()
         this.frontier.add(this.BoardObj.start)
