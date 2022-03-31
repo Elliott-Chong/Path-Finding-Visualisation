@@ -1,5 +1,5 @@
-const ROWS = 20
-const COLS = 20
+const ROWS = 25
+const COLS = 25
 let LENGTH;
 let BoardObj
 let ai
@@ -7,6 +7,8 @@ const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms))
 let sel
 let visualising = false
 let algorithm = 'Breadth First Search'
+movingStart = false
+movingEnd = false
 
 
 
@@ -55,19 +57,18 @@ const changeAlgorithm = () => {
 const reset = () => {
     BoardObj = new Board(ROWS, COLS)
     ai = new AI(BoardObj, algorithm)
+    visualising = false
 }
 
 const init = () => {
+    if (visualising) return
     visualising = true
     ai.start(algorithm)
 }
 
 
-const makeWall = () => {
+const makeWall = (y, x) => {
     if (visualising) return
-    let y, x
-    y = Math.floor(map(mouseY, 0, width, 0, ROWS))
-    x = Math.floor(map(mouseX, 0, height, 0, COLS))
     if (y >= ROWS || y < 0 || x >= COLS || x < 0) return
     if (!BoardObj.board[y][x].isWall && ((y != BoardObj.start.i || x != BoardObj.start.j) && (y != BoardObj.end.i || x != BoardObj.end.j))) {
         BoardObj.board[y][x].isWall = true
@@ -77,11 +78,22 @@ const makeWall = () => {
     // }
 }
 
+// const changeStart = (y, x) => {
+//     BoardObj.startingIndex = { i: y, j: x }
+//     BoardObj.rerender()
+// }
+
+
+
 
 
 async function draw() {
+
     if (mouseIsPressed) {
-        makeWall()
+        let y, x
+        y = Math.floor(map(mouseY, 0, width, 0, ROWS))
+        x = Math.floor(map(mouseX, 0, height, 0, COLS))
+        makeWall(y, x)
     }
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {

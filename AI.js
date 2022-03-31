@@ -91,6 +91,7 @@ class AI {
         }
         if (this.frontier.isEmpty()) {
             console.log("Invalid Maze")
+            visualising = false
         }
 
     }

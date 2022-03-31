@@ -22,6 +22,23 @@ class Board {
         }
     }
 
+    rerender() {
+        for (let i = 0; i < ROWS; i++) {
+            this.board[i] = new Array(COLS)
+        }
+        for (let i = 0; i < ROWS; i++) {
+            for (let j = 0; j < COLS; j++) {
+                this.board[i][j] = new Grid(i, j, (i == this.startingIndex.i && j == this.startingIndex.j), (i == this.endingIndex.i && j == this.endingIndex.j))
+                if (i == this.startingIndex.i && j == this.startingIndex.j) {
+                    this.start = this.board[i][j]
+                }
+                if (i == this.endingIndex.i && j == this.endingIndex.j) {
+                    this.end = this.board[i][j]
+                }
+            }
+        }
+    }
+
     reset() {
         for (let i = 0; i < ROWS; i++) {
             for (let j = 0; j < COLS; j++) {
