@@ -78,6 +78,10 @@ button {
   font-family: inherit;
   font-weight: inherit;
 }
+#phoneDiv {
+  position: absolute;
+  display: none;
+}
 
 #btnContainer {
   display: flex;
@@ -105,5 +109,27 @@ button {
 @media (max-width: 1100px) {
   * {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  #wallsContainer > :nth-child(1) {
+    white-space: normal;
+  }
+  #wallsContainer > :nth-child(2) {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 800px) {
+  body > :not(:first-child) {
+    display: none;
+  }
+  body {
+    padding: 10px;
+    text-align: center;
+  }
+  #phoneDiv {
+    display: block;
   }
 }

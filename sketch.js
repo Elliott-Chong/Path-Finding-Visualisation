@@ -37,6 +37,7 @@ function setup() {
     ai = new AI(BoardObj)
     // creating the elements
     let sideDiv = createDiv()
+    let phoneDiv = createDiv('It seems you are using a phone, for the best experience, please view this website on a laptop/desktop.')
     let btnContainer = createDiv()
     let wallsContainer = createDiv()
     let removeWallbtn = createButton('Remove walls')
@@ -79,6 +80,7 @@ function setup() {
     metaDiv.elt.setAttribute('id', 'metaDiv')
     wallsContainer.elt.setAttribute('id', 'wallsContainer')
     heading3.elt.classList.add('heading3')
+    phoneDiv.elt.setAttribute('id', 'phoneDiv')
     wallAnimationbtn.elt.classList.add('wallAnimation')
 
     // appending all the children and stuff
