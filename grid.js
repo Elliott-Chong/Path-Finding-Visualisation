@@ -7,6 +7,7 @@ class Grid {
         this.isExplored = false
         this.isStart = isStart
         this.parent = null
+        this.isFrontier = false
         this.isEnd = isEnd
         this.g = null
         this.h = null
@@ -38,6 +39,9 @@ class Grid {
         if (movingEnd && this.isEnd) {
             fill('rgba(255,0,0,0.5)')
         }
-        rect(this.j * LENGTH, this.i * LENGTH, LENGTH, LENGTH)
+        if (this.isFrontier) {
+            fill(0, 255, 0)
+        }
+        rect(this.j * LENGTH, this.i * LENGTH, LENGTH - 1, LENGTH - 1)
     }
 }

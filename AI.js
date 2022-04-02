@@ -55,23 +55,50 @@ class AI {
     }
 
     async start(algorithm) {
+        now = new Date()
+        startTime = 0
         this.algorithm = algorithm
+        let exploredNum = 0
+        finalPathCountP.elt.innerText = 'Final path count: 0'
+        timeP.elt.innerText = 'Time elapsed: 0s'
+        clearInterval(timeInterval)
+        timeInterval = setInterval(() => {
+            let hi = new Date()
+            startTime = hi - now
+            if (startTime >= 1000) {
+                timeP.elt.innerText = 'Time elapsed: ' + Math.floor(startTime / 1000) + 's ' + startTime % 1000 + 'ms'
+            }
+            else {
+                timeP.elt.innerText = 'Time elapsed: ' + startTime + 'ms'
+            }
+        }, 1)
         if (this.algorithm === 'Breadth First Search') {
             this.frontier = new QueueFrontier()
         }
         else if (this.algorithm === 'Depth First Search') {
             this.frontier = new StackFrontier()
         }
+        else if (this.algorithm === 'A* Search') {
+            this.aStar()
+            return
+        }
+        else if (this.algorithm === 'Greedy Best First Search') {
+            this.greedy()
+            return
+        }
         this.seen = []
         this.BoardObj.reset()
         this.frontier.add(this.BoardObj.start)
         let currentGrid;
         while (!this.frontier.isEmpty()) {
+            if (!visualising) return
             currentGrid = this.frontier.remove()
             if (arrContains(this.seen, currentGrid)) {
                 continue
             }
             currentGrid.isExplored = true
+            exploredNum += 1
+            exploredNumberP.elt.innerText = 'Explored grids: ' + exploredNum
             arrAdd(this.seen, currentGrid)
             if (currentGrid.isEnd) {
                 let path = [currentGrid]
@@ -79,6 +106,7 @@ class AI {
                     path.push(currentGrid.parent)
                     currentGrid = currentGrid.parent
                 }
+                console.log(`path count for ${this.algorithm} is`, path.length)
                 this.BoardObj.found(path)
                 return
             }
@@ -91,27 +119,114 @@ class AI {
         }
         if (this.frontier.isEmpty()) {
             console.log("Invalid Maze")
+            clearInterval(timeInterval)
             visualising = false
         }
 
     }
-    // for (let neigbour of this.getNeighbours(currentGrid)) {
-    //     if (arrContains(this.seen, neigbour)) continue
-    //     await sleep(5)
-    //     neigbour.isExplored = true
-    //     neigbour.parent = currentGrid
-    //     if (neigbour.isEnd) {
-    //         let path = [neigbour]
-    //         while (!compareGrids(neigbour, this.BoardObj.start)) {
-    //             path.push(neigbour.parent)
-    //             neigbour = neigbour.parent
-    //         }
-    //         console.log(path)
-    //         this.BoardObj.found(path)
-    //         return
-    //     }
-    //     this.frontier.add(neigbour)
-    // }
+
+    heuristic = (grid1, endGrid) => {
+        return Math.abs(endGrid.i - grid1.i) + Math.abs(endGrid.j - grid1.j)
+    }
+
+    lowestFScore = (openSet) => {
+        let winner = 0
+        for (let i = 0; i < openSet.length; i++) {
+            if (openSet[i].f < openSet[winner].f) {
+                winner = i
+            }
+        }
+        return openSet[winner]
+    }
+
+    async greedy() {
+        let exploredNum = 0
+        let openSet = [this.BoardObj.start]
+        this.seen = []
+        this.BoardObj.reset()
+        this.BoardObj.start.f = this.heuristic(this.BoardObj.start, this.BoardObj.end)
+        while (openSet.length > 0) {
+            if (!visualising) return
+            await sleep(5)
+            let currentGrid = this.lowestFScore(openSet)
+
+            if (currentGrid.isEnd) {
+                //found it
+                let path = [currentGrid]
+                while (!compareGrids(currentGrid, this.BoardObj.start)) {
+                    path.push(currentGrid.parent)
+                    currentGrid = currentGrid.parent
+                }
+                console.log(`path count for Greedy Best First Search is`, path.length)
+                this.BoardObj.found(path)
+                return
+            }
+            currentGrid.isExplored = true
+            exploredNum += 1
+            exploredNumberP.elt.innerText = 'Explored grids: ' + exploredNum
+            arrRemove(openSet, currentGrid)
+            arrAdd(this.seen, currentGrid)
+            for (let neigbour of this.getNeighbours(currentGrid)) {
+                if (arrContains(this.seen, neigbour)) continue
+                neigbour.f = this.heuristic(neigbour, this.BoardObj.end)
+                neigbour.parent = currentGrid
+                arrAdd(openSet, neigbour)
+            }
+        }
+        console.log('Invalid maze')
+        clearInterval(timeInterval)
+        visualising = false
+    }
+
+    async aStar() {
+        let exploredNum = 0
+        let openSet = [this.BoardObj.start]
+        this.seen = []
+        this.BoardObj.reset()
+        this.BoardObj.start.g = 0
+        this.BoardObj.start.f = this.heuristic(this.BoardObj.start, this.BoardObj.end)
+        while (openSet.length > 0) {
+            if (!visualising) return
+            await sleep(5)
+            let currentGrid = this.lowestFScore(openSet)
+            if (currentGrid.isEnd) {
+                //found it
+                let path = [currentGrid]
+                while (!compareGrids(currentGrid, this.BoardObj.start)) {
+                    path.push(currentGrid.parent)
+                    currentGrid = currentGrid.parent
+                }
+                console.log("path count for A* is", path.length)
+                this.BoardObj.found(path)
+                return
+            }
+            currentGrid.isExplored = true
+            exploredNum += 1
+            exploredNumberP.elt.innerText = 'Explored grids: ' + exploredNum
+            arrRemove(openSet, currentGrid)
+            arrAdd(this.seen, currentGrid)
+            for (let neigbour of this.getNeighbours(currentGrid)) {
+                if (arrContains(this.seen, neigbour)) continue
+                let tempG = currentGrid.g + 1
+                if (!arrContains(openSet, neigbour)) {
+                    neigbour.g = tempG
+                    neigbour.f = this.heuristic(neigbour, this.BoardObj.end) + neigbour.g
+                    arrAdd(openSet, neigbour)
+                    neigbour.parent = currentGrid
+                }
+                else if (tempG < neigbour.g) {
+                    neigbour.g = tempG
+                    neigbour.f = this.heuristic(neigbour, this.BoardObj.end) + neigbour.g
+                    neigbour.parent = currentGrid
+                }
+
+            }
+        }
+        console.log('Invalid maze')
+        clearInterval(timeInterval)
+        visualising = false
+    }
+
 
     getNeighbours(grid) {
         let neigbours = []
@@ -132,9 +247,6 @@ class AI {
                 }
             }
         }
-
-
-
 
         return neigbours
     }

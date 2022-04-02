@@ -4,12 +4,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* user-select: none; */
   font-family: "Poppins", sans-serif;
 }
 
 body {
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  font-size: 1rem;
   align-items: center;
   min-height: 100vh;
 }
@@ -18,14 +21,38 @@ button {
   cursor: pointer;
   padding: 5px 10px;
   font-family: inherit;
+  color: black;
+  font-size: inherit;
   background-color: white;
   font-weight: inherit;
   border: 2px solid black;
+  user-select: none;
+}
+
+#wallsContainer {
+  width: 100%;
+  display: flex;
+}
+
+#wallsContainer > :nth-child(1) {
+  width: 100%;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+#wallsContainer > :nth-child(2) {
+  width: 100%;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.wallAnimation {
+  background-color: rgb(75, 75, 75);
+  color: white;
 }
 
 #sideDiv {
   margin-left: 20px;
-  width: 12vw;
+  width: 25vw;
 }
 
 #btnContainer > * {
@@ -33,14 +60,22 @@ button {
 }
 
 #infoDiv {
-  text-align: center;
+  text-align: justify;
+}
+
+#infoDiv > * {
+  margin: 8px 0px;
 }
 
 #btnContainer select {
+  font-size: inherit;
+  user-select: none;
   border: 2px solid black;
+  color: black;
   padding: 5px 10px;
   text-align: center;
-  background: white;
+  border-radius: 0px;
+  background-color: white;
   font-family: inherit;
   font-weight: inherit;
 }
@@ -49,4 +84,27 @@ button {
   display: flex;
   flex-direction: column;
   font-weight: 600;
+}
+
+.removeWall {
+  background-color: rgb(75, 75, 75);
+  color: white;
+}
+
+#metaDiv {
+  margin-bottom: 10px;
+  text-align: justify;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.heading3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  * {
+    font-size: 1rem;
+  }
 }
