@@ -128,8 +128,11 @@ button {
   body {
     padding: 10px;
     text-align: center;
+	overflow: hidden;
+	background-color: black;
   }
   #phoneDiv {
     display: block;
+	color: white;
   }
 }
